@@ -15,6 +15,7 @@ def main() -> None:
     canadate_file = open(CANADATE_FILE_NAME)
     canadate_to_political_afil = get_canadates_to_political_afil(canadate_file)
     canadate_file.close()
+    print(verify_winner(canadate_to_political_afil, region_code_to_canadate_votes))
 
 
 def verify_winner(canadate_to_political_afil: dict[str, str],
@@ -22,6 +23,16 @@ def verify_winner(canadate_to_political_afil: dict[str, str],
     """Return the name in english of the party with the most sucsesfull mp
     canadates"""
     winner = ""
+    party_to_votes = {}
+    for canadates in region_code_to_canadate_votes.values():
+        for canadate in canadates:
+            party = canadate_to_political_afil[canadate]
+            if party in party_to_votes:
+                party_to_votes[party] += canadates[canadate]
+            else: 
+                party_to_votes[party] = canadates[canadate]
+    #key error caused by conflict on char types in vote vs canadate file
+    print(party_to_votes)
     return winner
 
 
