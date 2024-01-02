@@ -1,6 +1,9 @@
 from constants import (SEP, IN_ED_CODE, IN_ED_NAMEE, IN_POPULATION, 
                        DIST_POP, DIST_NUM, DIST_FILE_NAME, FILE_TYPE, 
-                       VOTE_FILE_NAME, CANADATE_END, CANADATE_START)
+                       VOTE_FILE_NAME, CANADATE_END, CANADATE_START, 
+                       VOTE_FILE_DIRECTORY, CANADATE_HEAD_SIZE, 
+                       CANADATE_POS_F, CANADATE_POS_L, SPACE_SEP, TAB,
+                       CANADATE_FILE_NAME, POL_PARTY)
 from typing import TextIO
 
 def main() -> None:
@@ -9,16 +12,42 @@ def main() -> None:
     districts = get_district(district_file)
     district_file.close()
     region_code_to_canadate_votes = get_stations(districts)
-    print(region_code_to_canadate_votes)
+    canadate_file = open(CANADATE_FILE_NAME)
+    canadate_to_political_afil = get_canadates_to_political_afil(canadate_file)
+    canadate_file.close()
+
+
+def verify_winner(canadate_to_political_afil: dict[str, str],
+                  region_code_to_canadate_votes) -> str:
+    """Return the name in english of the party with the most sucsesfull mp
+    canadates"""
+    winner = ""
+    return winner
+
+
+def get_canadates_to_political_afil(data_file: TextIO) -> dict[str, str]:
+    """Return all canadates to their respective political 
+    afiliation"""
+    canadates_to_political_afil = {}
+    for _ in range(CANADATE_HEAD_SIZE):
+        data_file.readline()
+    for line in data_file:
+        line = line.strip().split(TAB)
+        canadates_to_political_afil[line[CANADATE_POS_F]+SPACE_SEP+line[CANADATE_POS_L]] = (
+        line[POL_PARTY])
+    return canadates_to_political_afil
+
 
 def get_stations(districts) -> dict[str, dict[str,int]]:
     """Return region code to canadate names to votes; from districts 
     nameing patterened files
     """
     district_to_canadates_votes = {}
-    for district in districts:
-        current_vote_file = open(VOTE_FILE_NAME+district[DIST_NUM]+FILE_TYPE)
+    for district in districts.values():
+        current_vote_file = open(VOTE_FILE_DIRECTORY+
+                                 VOTE_FILE_NAME+district[DIST_NUM]+FILE_TYPE)
         district_to_canadates_votes[district[DIST_NUM]] = count_district(current_vote_file)
+        current_vote_file.close()
     return district_to_canadates_votes
 
 
@@ -36,7 +65,9 @@ def count_district(data_file: TextIO) -> dict[str:int]:
     for vote in votes:
         i = 0
         for canadate in canadates_to_votes:
-            canadates_to_votes[canadate] += vote[i]
+            if not vote[i].isdigit():
+                continue
+            canadates_to_votes[canadate] += int(vote[i])
             i += 1
     return canadates_to_votes
 
