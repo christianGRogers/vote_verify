@@ -25,6 +25,8 @@ def verify_winner(canadate_to_political_afil: dict[str, str],
     winner = ""
     party_to_votes = {}
     for canadates in region_code_to_canadate_votes.values():
+        print(canadates)
+        input()
         for canadate in canadates:
             party = canadate_to_political_afil[canadate]
             if party in party_to_votes:
