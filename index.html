@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Interface</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1a1a1a;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .chat-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chat-container, .chat-header, .chat-body, .input-container {
+      width: 90%;
+      height: 90%;
+      align-items: center;
+    }
+
+    .chat-container {
+      max-width: 100%;
+      max-height: 100%;
+      align-items: center;
+    }
+
+    .chat-header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+
+    .chat-body {
+      padding: 10px;
+      height: 700px;
+      overflow-y: auto;
+      background-color: #2c2c2c;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+
+    .chat-message {
+      margin-bottom: 20px;
+    }
+
+    .user-message {
+      text-align: right;
+    }
+
+    .bot-message {
+      text-align: left;
+    }
+
+    .message-text {
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .user-message .message-text {
+      background-color: #007bff;
+    }
+
+    .bot-message .message-text {
+      background-color: #4CAF50;
+    }
+
+    .input-container {
+      padding: 10px;
+      background-color: #333;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+
+    .input-box {
+      width: calc(100% - 20px);
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #2c2c2c;
+      color: #fff;
+    }
+
+    .send-button {
+      padding: 8px 30px;
+      background-color: #000000;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">
+      Vote Verify
+    </div>
+    <div class="chat-body" id="chat-body">
+      <!-- Chat messages will be dynamically added here -->
+    </div>
+    <div class="input-container">
+      <input type="text" class="input-box" id="user-input" placeholder="enter command" onkeydown="checkEnter(this)">
+      <button class="send-button" onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    function sendMessage() {
+        var userInput = document.getElementById('user-input').value;
+        var chatBody = document.getElementById('chat-body');
+
+        if (userInput.trim() === '') return;
+
+        var userMessage = '<div class="chat-message user-message"><div class="message-text">' + userInput + '</div></div>';
+
+        var botMessage = '<div class="chat-message bot-message"><div class="message-text">This is a sample response from the bot.</div></div>';
+        chatBody.innerHTML += userMessage;
+
+        chatBody.innerHTML += botMessage;
+        chatBody.scrollTop = chatBody.scrollHeight;
+
+        document.getElementById('user-input').value = '';
+    }
+    function checkEnter(ele){
+        if(event.keyCode == 13){
+            sendMessage();
+        }
+    }
+  </script>
+<footer><center><p>(Christian Rogers 2024) All data is from Elections Canada and is presented honestly</p></center></footer>
+</body>
+</html>
